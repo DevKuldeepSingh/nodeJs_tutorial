@@ -1,0 +1,14 @@
+/build
+/node_modules
+.env.*
+/.project
+/logs
+src/.DS_Store
+/Logs
+*.log
+*.DS_Store
+*.zip
+logs/combined.log
+logs/error.log
+logs/combined.log
+package-lock.json
