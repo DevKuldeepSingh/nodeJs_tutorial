@@ -8,4 +8,10 @@ const studentSchema = new Schema({
   name: String,
 });
 
+const studentProfile = new Schema({
+  name: { type: String },
+  profilePic: { type: String },
+});
+
 module.exports = studentSchema;
+module.exports = studentProfile;

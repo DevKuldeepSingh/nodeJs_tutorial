@@ -4,6 +4,7 @@ const studentSchema = require("./modelSchema");
 
 const mongoDB = require("mongodb");
 const App = require("./server");
+const studentProfile = require("./modelSchema");
 
 App.use(express.json());
 App.get("/getstudentbyid/:id", async (req, resp) => {
@@ -95,4 +96,25 @@ App.get("/searchStudentData", async (req, resp) => {
   }
 });
 
-App.listen(8080);
+// App.post("/uploadStudentProfile", async (req, resp) => {
+//   const studentProfile = mongoose.model("students", studentProfile);
+//   console.log(req);
+// });
+App.post("/uploadStudentProfile", (req, res) => {
+  if (!req.body.fileData) {
+    return res.status(400).json({ error: "No file data provided" });
+  }
+
+  const base64Data = req.body.fileData;
+  const uploadPath = path.join(__dirname, "uploads", "myfile.jpg"); // Set the destination path for the uploaded file
+  const fileData = Buffer.from(base64Data, "base64");
+
+  fs.writeFile(uploadPath, fileData, (err) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: "Failed to upload file" });
+    }
+
+    res.json({ message: "File uploaded successfully" });
+  });
+});
