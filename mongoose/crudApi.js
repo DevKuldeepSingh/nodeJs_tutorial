@@ -36,11 +36,16 @@ App.put("/addStudentData", async (req, resp) => {
 
 App.post("/updateStudentData", async (req, resp) => {
   const Student = mongoose.model("grades", studentSchema);
-  const { id, subjects, grades } = req.body;
+  const { id, subjects, grades, name } = req.body;
   try {
     const result = await Student.findById({
       _id: new mongoDB.ObjectId(id),
-    }).updateOne({}, { subjects, grades });
+    }).updateOne({}, { subjects, grades, name });
+    // const result = await Student.findByIdAndUpdate(new mongoDB.ObjectId(id), {
+    //   subjects,
+    //   grades,
+    // });
+
     if (
       result.acknowledged &&
       (result.modifiedCount === 1 || result.matchedCount === 1)
@@ -68,6 +73,25 @@ App.delete("/deleteStudent/:id", async (req, resp) => {
     }
   } catch (error) {
     resp.status(500).send("internal server error");
+  }
+});
+
+App.get("/searchStudentData", async (req, resp) => {
+  const Student = mongoose.model("grades", studentSchema);
+  const searchParams = req.query;
+  console.log(searchParams);
+  try {
+    let query = {};
+    Object.keys(searchParams).forEach((params) => {
+      const value = JSON.parse(searchParams[params]);
+      query[params] = { $in: value };
+    });
+
+    const result = await Student.find(query);
+    resp.status(200).send(result);
+  } catch (error) {
+    console.log(error);
+    resp.status(500).send({ error: "Search failed" });
   }
 });
 
