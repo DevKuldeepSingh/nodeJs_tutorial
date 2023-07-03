@@ -13,5 +13,17 @@ const studentProfile = new Schema({
   profilePic: { type: String },
 });
 
+const uploadedFileSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  profilePic: {
+    type: Buffer,
+    required: true,
+  },
+});
+
 module.exports = studentSchema;
 module.exports = studentProfile;
+module.exports = uploadedFileSchema;
